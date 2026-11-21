@@ -1250,12 +1250,139 @@
   color: #7c8aa5;
 }
 
-/* Dominio como enlace azul */
+/* Dominio como enlace azul (URL completa) */
+.ap-td-domain {
+  max-width: 440px;
+}
+
+.ap-domain-cell {
+  align-items: flex-start;
+  max-width: 100%;
+}
+
+.ap-domain-bullet {
+  margin-top: 0.35rem;
+  flex-shrink: 0;
+}
+
 .ap-domain-text {
-  color: #5788cd;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1.10rem;
+  color: #60a5fa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
   font-weight: 500;
+  line-height: 1.45;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* Acciones masivas en la barra de pestañas */
+.ap-tabs-bulk-actions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ap-btn-clear-sel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.42rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.ap-btn-clear-sel .material-symbols-outlined {
+  font-size: 0.95rem;
+}
+
+.ap-btn-clear-sel:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ap-btn-run-selected {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.ap-btn-run-selected .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+.ap-btn-run-selected.has-selection {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px -4px rgba(37, 99, 235, 0.6);
+}
+
+.ap-btn-run-selected.has-selection:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(14, 116, 144, 0.7);
+}
+
+.ap-btn-run-selected.has-selection:active {
+  transform: scale(0.98);
+}
+
+/* Aviso de bloqueador de ventanas emergentes */
+.ap-popup-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fde68a;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.ap-popup-warning .material-symbols-outlined {
+  font-size: 1.15rem;
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.ap-popup-warning-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #fde68a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  border-radius: 6px;
+}
+
+.ap-popup-warning-close:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Estado como píldora */

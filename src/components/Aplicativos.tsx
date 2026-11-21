@@ -186,8 +186,9 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
   // --- Selección múltiple ---
   const [seleccionados, setSeleccionados] = useState<Set<string | number>>(new Set());
 
-  // --- Feedback de Copiado ---
+  // --- Feedback de Copiado y Popups bloqueados ---
   const [copiadoId, setCopiadoId] = useState<string | number | null>(null);
+  const [avisoPopup, setAvisoPopup] = useState<string | null>(null);
 
   // --- Estados de Modal de Creación / Edición ---
   const [modalOpen, setModalOpen] = useState(false);
@@ -348,14 +349,18 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
   const enMantenimiento = aplicativos.filter((a) => a.estado === "Mantenimiento").length;
 
   // --- Manejadores de Selección ---
+  const todosVisiblesSeleccionados =
+    appsRenderizadas.length > 0 &&
+    appsRenderizadas.every((a) => seleccionados.has(a.id));
+
   const toggleSeleccionarTodos = () => {
-    if (seleccionados.size === appsRenderizadas.length && appsRenderizadas.length > 0) {
-      setSeleccionados(new Set());
+    const nuevoSet = new Set(seleccionados);
+    if (todosVisiblesSeleccionados) {
+      appsRenderizadas.forEach((a) => nuevoSet.delete(a.id));
     } else {
-      const nuevoSet = new Set<string | number>();
       appsRenderizadas.forEach((a) => nuevoSet.add(a.id));
-      setSeleccionados(nuevoSet);
     }
+    setSeleccionados(nuevoSet);
   };
 
   const toggleSeleccionarItem = (id: string | number) => {
@@ -366,6 +371,37 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
       nuevo.add(id);
     }
     setSeleccionados(nuevo);
+  };
+
+  const limpiarSeleccion = () => {
+    setSeleccionados(new Set());
+    setAvisoPopup(null);
+  };
+
+  const ejecutarSeleccionados = () => {
+    const appsParaAbrir = aplicativos.filter((a) => seleccionados.has(a.id));
+    if (appsParaAbrir.length === 0) return;
+
+    let bloqueados = 0;
+    appsParaAbrir.forEach((app) => {
+      const urlLimpia = app.url.trim();
+      const u = urlLimpia.startsWith("http://") || urlLimpia.startsWith("https://")
+        ? urlLimpia
+        : `https://${urlLimpia}`;
+      const win = window.open(u, "_blank", "noopener,noreferrer");
+      if (!win) {
+        bloqueados += 1;
+      }
+    });
+
+    if (bloqueados > 0) {
+      setAvisoPopup(
+        `El navegador bloqueó ${bloqueados} pestaña(s). Permite las ventanas emergentes para este sitio en la barra de direcciones para abrir todos al mismo tiempo.`
+      );
+      setTimeout(() => setAvisoPopup(null), 8000);
+    } else {
+      setAvisoPopup(null);
+    }
   };
 
   // --- Acciones de Fila ---
@@ -520,7 +556,53 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
               </button>
             );
           })}
+
+          <div className="ap-tabs-bulk-actions">
+            {seleccionados.size > 0 && (
+              <button
+                type="button"
+                onClick={limpiarSeleccion}
+                className="ap-btn-clear-sel"
+                title="Quitar selección"
+              >
+                <span className="material-symbols-outlined">close</span>
+                <span>Limpiar</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={ejecutarSeleccionados}
+              disabled={seleccionados.size === 0}
+              className={`ap-btn-run-selected ${seleccionados.size > 0 ? "has-selection" : ""}`}
+              title={
+                seleccionados.size > 0
+                  ? `Abrir ${seleccionados.size} aplicativo(s) en pestañas nuevas`
+                  : "Selecciona uno o más aplicativos en las casillas"
+              }
+            >
+              <span className="material-symbols-outlined">open_in_new</span>
+              <span>
+                Ejecutar seleccionados
+                {seleccionados.size > 0 ? ` (${seleccionados.size})` : ""}
+              </span>
+            </button>
+          </div>
         </nav>
+
+        {avisoPopup && (
+          <div className="ap-popup-warning" role="alert">
+            <span className="material-symbols-outlined">info</span>
+            <span>{avisoPopup}</span>
+            <button
+              type="button"
+              onClick={() => setAvisoPopup(null)}
+              className="ap-popup-warning-close"
+              aria-label="Cerrar aviso"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        )}
 
         {/* ============================================================ */}
         {/* TABLA DE APLICATIVOS (DATAGRID)                              */}
@@ -534,7 +616,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                     <label className="ap-checkbox-custom">
                       <input
                         type="checkbox"
-                        checked={appsRenderizadas.length > 0 && seleccionados.size === appsRenderizadas.length}
+                        checked={todosVisiblesSeleccionados}
                         onChange={toggleSeleccionarTodos}
                         aria-label="Seleccionar todos los visibles"
                       />
@@ -600,7 +682,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                           </div>
                         </td>
 
-                        {/* Dominio */}
+                        {/* Dominio / URL completa */}
                         <td className="ap-td-domain">
                           <a
                             href={app.url.startsWith("http") ? app.url : `https://${app.url}`}
@@ -612,7 +694,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                             <span className={`ap-domain-bullet ${getBulletClass(app.estado)}`}>
                               ●
                             </span>
-                            <span className="ap-domain-text">{dominio}</span>
+                            <span className="ap-domain-text">{app.url}</span>
                           </a>
                         </td>
 
