@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import PwaRegistrar from "../components/PwaRegistrar";
 
 export const metadata: Metadata = {
   title: "SIGED - Despacho-B2B",
@@ -29,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning className="dark">
       <head>
-        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" type="image/png" href="/icon-192x192.png?v=2" />
         <link rel="apple-touch-icon" href="/icon-192x192.png?v=2" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -43,6 +43,7 @@ export default function RootLayout({
           min-h-screen
         `}
       >
+        <PwaRegistrar />
         {children}
         <div id="modal-root" />
       </body>
