@@ -1,0 +1,252 @@
+/**
+ * ==============================================================================
+ *  SIGED: Sistema de Temas (Dark / Light)
+ * ==============================================================================
+ *  - El tema por defecto es OSCURO (Dark).
+ *  - Al activar 'light-theme' en el body o 'light' en html, se aplican variables
+ *    y sobreescrituras elegantes en escala de grises / azul slate profesional.
+ */
+
+:root {
+  --bg-page: #020617;
+  --bg-sidebar: #01040a;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(15, 23, 42, 0.7);
+  --input-border: #334155;
+  --glass-bg: rgba(15, 23, 42, 0.4);
+}
+
+/* ==============================================================================
+   MODO CLARO (LIGHT THEME)
+   Activado con la clase .light-theme en <body> o .light en <html>
+============================================================================== */
+html.light,
+body.light-theme {
+  --bg-page: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Transición suave al alternar temas */
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Fondo principal y app container */
+body.light-theme .app-container {
+  background-color: #f8fafc !important;
+}
+
+body.light-theme .main-container {
+  background-color: #f8fafc !important;
+}
+
+body.light-theme .bg-mesh {
+  background-color: #f8fafc !important;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(147, 197, 253, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(226, 232, 240, 0.3) 0px, transparent 50%) !important;
+}
+
+/* --- SIDEBAR EN MODO CLARO --- */
+body.light-theme aside {
+  background-color: #ffffff !important;
+  border-right-color: #e2e8f0 !important;
+}
+
+body.light-theme aside h1,
+body.light-theme aside p,
+body.light-theme aside span,
+body.light-theme aside button {
+  color: #1e293b;
+}
+
+body.light-theme aside .text-white {
+  color: #0f172a !important;
+}
+
+body.light-theme aside .text-slate-400 {
+  color: #64748b !important;
+}
+
+body.light-theme aside button:hover {
+  background-color: #f1f5f9 !important;
+}
+
+body.light-theme aside .border-slate-800\/50 {
+  border-color: #e2e8f0 !important;
+}
+
+/* --- CABECERAS Y GLASSMORPHISM EN MODO CLARO --- */
+body.light-theme .glass {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme header .glass button {
+  color: #334155 !important;
+}
+
+body.light-theme header .glass button:hover {
+  color: #0284c7 !important;
+}
+
+body.light-theme .welcome-title {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+body.light-theme .welcome-subtitle {
+  color: #64748b !important;
+}
+
+/* --- TARJETAS, GRIDS Y PANELES --- */
+body.light-theme .nota-card-p,
+body.light-theme .novedad-card,
+body.light-theme .plantilla-card-premium,
+body.light-theme .plantilla-item,
+body.light-theme .conciliacion-card-p,
+body.light-theme .card-p,
+body.light-theme .data-table {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.06);
+}
+
+body.light-theme .card-content-p,
+body.light-theme .novedad-texto,
+body.light-theme .plantilla-texto,
+body.light-theme .data-table td {
+  color: #334155 !important;
+}
+
+body.light-theme .title-p,
+body.light-theme .plantilla-nombre,
+body.light-theme .card-title-p,
+body.light-theme .page-title h2,
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3 {
+  color: #0f172a !important;
+}
+
+body.light-theme .subtitle-p,
+body.light-theme .page-subtitle {
+  color: #64748b !important;
+}
+
+/* --- TABLAS (APLICATIVOS) --- */
+body.light-theme .table-wrapper {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+body.light-theme .data-table th {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+body.light-theme .data-table tr:hover {
+  background-color: #f8fafc !important;
+}
+
+body.light-theme .app-name {
+  color: #0f172a !important;
+}
+
+body.light-theme .app-url a {
+  color: #2563eb !important;
+}
+
+/* --- INPUTS, TEXTAREAS Y BUSCADORES --- */
+body.light-theme input[type="text"],
+body.light-theme input[type="time"],
+body.light-theme textarea,
+body.light-theme select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-theme input::placeholder,
+body.light-theme textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.light-theme .search-box {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-theme .search-box input {
+  color: #0f172a !important;
+}
+
+/* --- BOTONES Y ACCIONES EN MODO CLARO --- */
+body.light-theme .btn-icon,
+body.light-theme .btn-copy-p,
+body.light-theme .btn-edit-p,
+body.light-theme .btn-delete-p {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+body.light-theme .btn-copy-p:hover,
+body.light-theme .btn-edit-p:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* --- SELECTOR DE TORRES --- */
+body.light-theme .torre-selector-title {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+body.light-theme .torre-button {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .torre-button:hover {
+  background: #f1f5f9 !important;
+  border-color: #3b82f6 !important;
+}
+
+/* --- MODALES EN MODO CLARO --- */
+body.light-theme .modal-content {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-theme .modal-header h2,
+body.light-theme .modal-header h3,
+body.light-theme .modal-title {
+  color: #0f172a !important;
+}
+
+body.light-theme .modal-close {
+  color: #64748b !important;
+}

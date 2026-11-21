@@ -1,0 +1,602 @@
+/* ==============================================================================
+   PLANTILLAS ADICIONALES — DARK OBSIDIAN DESIGN (FIDELIDAD 1:1)
+============================================================================== */
+
+.plantilla-containerr {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2.25rem 2rem 4rem;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+  background:
+    radial-gradient(ellipse 50% 35% at 8% 10%, rgba(37, 99, 235, 0.24) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 95% 95%, rgba(8, 145, 178, 0.22) 0%, transparent 70%);
+}
+
+.plantilla-content {
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  animation: paFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes paFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================================================================
+   1. HEADER PRINCIPAL
+============================================================================== */
+.plantilla-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.plantilla-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.plantilla-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 8px 22px -6px rgba(37, 99, 235, 0.65);
+}
+
+.plantilla-icon .material-symbols-outlined {
+  font-size: 1.5rem;
+}
+
+.plantilla-title-text h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.plantilla-title-text p {
+  font-size: 0.85rem;
+  color: #7c8aa5;
+  margin: 0.2rem 0 0;
+}
+
+.agregar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 44px;
+  padding: 0 1.25rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, 0.65);
+  transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+
+.agregar-button:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px -8px rgba(14, 116, 144, 0.65);
+}
+
+.agregar-button .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
+/* ==============================================================================
+   2. BUSCADOR
+============================================================================== */
+.pa-search-box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.pa-search-icon {
+  position: absolute;
+  left: 15px;
+  color: #64748b;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.pa-search-input {
+  width: 100%;
+  height: 46px;
+  background: #060b18;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0 42px 0 44px;
+  font-size: 0.88rem;
+  color: #f1f5f9;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pa-search-input::placeholder {
+  color: #55627c;
+}
+
+.pa-search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.pa-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.pa-search-clear:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==============================================================================
+   3. GRID DE TARJETAS (2 COLUMNAS EXACTAS)
+============================================================================== */
+.plantilla-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.35rem;
+}
+
+@media (max-width: 880px) {
+  .plantilla-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plantilla-item {
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.94) 0%, rgba(7, 12, 26, 0.97) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.4rem 1.45rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  cursor: grab;
+  box-sizing: border-box;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.75);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plantilla-item:hover {
+  border-color: rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+}
+
+.plantilla-item.dragging {
+  opacity: 0.7;
+  cursor: grabbing;
+}
+
+.plantilla-nombre {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Caja interna oscura de contenido (exacta a la imagen) */
+.plantilla-texto-box {
+  background: #060b18;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  flex: 1;
+  min-height: 215px;
+  box-sizing: border-box;
+}
+
+.plantilla-texto {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 0.86rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  line-clamp: 10;
+  -webkit-box-orient: vertical;
+}
+
+.pa-field-label {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* Botones de acción (3 columnas: COPIAR / EDITAR / ELIMINAR) */
+.plantilla-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin-top: 0.15rem;
+}
+
+.plantilla-button {
+  height: 42px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.plantilla-button .material-symbols-outlined {
+  font-size: 1.05rem;
+}
+
+/* COPIAR — degradado azul-turquesa vibrante con resplandor */
+.plantilla-button.copy {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  border: 1px solid transparent;
+  color: #ffffff;
+  box-shadow: 0 10px 26px -6px rgba(37, 99, 235, 0.7);
+}
+
+.plantilla-button.copy:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -6px rgba(14, 116, 144, 0.75);
+}
+
+.plantilla-button.copy.is-copied {
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #6ee7b7;
+  box-shadow: none;
+}
+
+/* EDITAR & ELIMINAR — botones oscuros limpios */
+.plantilla-button.edit,
+.plantilla-button.clear {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cbd5e1;
+}
+
+.plantilla-button.edit:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.plantilla-button.clear:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.38);
+  color: #fca5a5;
+  transform: translateY(-1px);
+}
+
+/* ==============================================================================
+   4. FOOTER PILL (TOTAL DE PLANTILLAS)
+============================================================================== */
+.plantilla-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.pa-footer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 1.45rem;
+  border-radius: 999px;
+  background: rgba(11, 18, 36, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #8b9cb3;
+}
+
+.pa-footer-pill strong {
+  color: #60a5fa;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+/* ==============================================================================
+   5. ESTADOS CARGA Y VACÍO
+============================================================================== */
+.pa-loading,
+.pa-empty-state {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background: rgba(6, 11, 24, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  color: #7c8aa5;
+}
+
+.pa-empty-state .material-symbols-outlined {
+  font-size: 2.75rem;
+  color: #475569;
+}
+
+.pa-empty-state strong {
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.pa-empty-state p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.pa-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: paSpin 0.75s linear infinite;
+}
+
+@keyframes paSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==============================================================================
+   6. MODAL AGREGAR / EDITAR PLANTILLA
+============================================================================== */
+.pa-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(2, 6, 23, 0.74);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.pa-modal-card {
+  width: 100%;
+  max-width: 580px;
+  padding: 26px 28px 24px;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse 80% 45% at 15% 0%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    linear-gradient(180deg, #0b1326 0%, #060b17 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.9), 0 0 60px -20px rgba(37, 99, 235, 0.35);
+  box-sizing: border-box;
+  animation: paScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes paScaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.pa-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.pa-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pa-modal-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 10px 24px -6px rgba(37, 99, 235, 0.65);
+}
+
+.pa-modal-badge .material-symbols-outlined {
+  font-size: 1.5rem;
+}
+
+.pa-modal-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.pa-modal-subtitle {
+  margin: 3px 0 0;
+  font-size: 0.84rem;
+  color: #8b9cb3;
+}
+
+.pa-modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.pa-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.pa-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pa-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.pa-modal-label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.pa-required {
+  color: #f59e0b;
+}
+
+.pa-modal-input,
+.pa-modal-textarea {
+  width: 100%;
+  background: #050a16;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  color: #f8fafc;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pa-modal-textarea {
+  resize: vertical;
+  line-height: 1.55;
+  min-height: 150px;
+}
+
+.pa-modal-input:focus,
+.pa-modal-textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+}
+
+.pa-modal-footer {
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.pa-btn-cancel {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.pa-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.pa-btn-save {
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 11px;
+  border: none;
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, 0.65);
+  transition: all 0.18s ease;
+}
+
+.pa-btn-save:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .plantilla-containerr {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .plantilla-buttons {
+    grid-template-columns: 1fr;
+  }
+}

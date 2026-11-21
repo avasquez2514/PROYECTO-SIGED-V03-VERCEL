@@ -1,0 +1,1193 @@
+/* ==============================================================================
+   NOTAS DE AVANCES — DARK OBSIDIAN DESIGN 1:1 FIDELITY
+============================================================================== */
+
+.na-view {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: transparent;
+  color: #fff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-y: auto;
+  padding: 2rem 1.5rem 4rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.na-container {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 5;
+  animation: naFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes naFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================================================================
+   1. HEADER PRINCIPAL
+============================================================================== */
+.na-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.na-title-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.na-icon-badge {
+  width: 44px;
+  height: 44px;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.na-icon-badge .material-symbols-outlined {
+  font-size: 1.55rem;
+}
+
+.na-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.na-subtitle {
+  font-size: 0.85rem;
+  color: #8b9cb3;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+}
+
+/* Botón superior derecho: + Agregar nota */
+.na-btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.58rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.na-btn-add:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  transform: translateY(-1px);
+}
+
+.na-btn-add .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
+/* ==============================================================================
+   2. BARRA DE BÚSQUEDA Y TABS SEGMENTADAS
+============================================================================== */
+.na-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Buscador */
+.na-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+}
+
+.na-search-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.na-search-input {
+  width: 100%;
+  height: 44px;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0 40px 0 42px;
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.na-search-input::placeholder {
+  color: #64748b;
+}
+
+.na-search-input:focus {
+  border-color: #3b82f6;
+  background: #060d1b;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.na-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.na-search-clear:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.na-search-clear .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+/* Tabs Segmentadas: Todas / Favoritas */
+.na-tabs-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.na-tab-btn {
+  height: 36px;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.na-tab-btn:hover:not(.is-active) {
+  background: rgba(255, 255, 255, 0.03);
+  color: #cbd5e1;
+}
+
+.na-tab-btn.is-active {
+  background: #14213d;
+  background: linear-gradient(180deg, #182849 0%, #111e38 100%);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.na-star-icon {
+  color: #fbbf24;
+  font-size: 0.95rem;
+}
+
+/* ==============================================================================
+   3. GRID DE TARJETAS (3 COLUMNAS EXACTAS SEGÚN MAQUETA)
+============================================================================== */
+.na-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (max-width: 1060px) {
+  .na-grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .na-grid-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjeta Individual de Nota */
+.na-card {
+  background: #080f1e;
+  background: radial-gradient(circle at 50% 0%, #0d1b36 0%, #060b16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.1rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  min-height: 165px;
+  box-sizing: border-box;
+}
+
+.na-card:hover {
+  border-color: rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.65);
+}
+
+.na-card.is-fav {
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+/* Parte superior de la tarjeta: Texto y Botón de Estrella */
+.na-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.na-card-text {
+  margin: 0;
+  font-size: 0.91rem;
+  color: #f1f5f9;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Botón Estrella Favorito */
+.na-star-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  margin: 0;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.na-star-btn .material-symbols-outlined {
+  font-size: 1.35rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+  transition: all 0.18s ease;
+}
+
+.na-star-btn:hover {
+  color: #fbbf24;
+  transform: scale(1.18);
+}
+
+.na-star-btn.is-active {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5));
+}
+
+.na-star-btn.is-active .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 400;
+}
+
+/* Parte inferior de la tarjeta: Botón Copiar a la izquierda, Acciones a la derecha */
+.na-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+/* Botón "Copiar" */
+.na-btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0c234b;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  padding: 0.42rem 0.85rem;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.na-btn-copy:hover {
+  background: #ffd815;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #000000;
+}
+
+.na-btn-copy.is-copied {
+  background: rgba(179, 185, 16, 0.18) !important;
+  color: #ffd815 !important;
+  border-color: #000000 !important;
+}
+
+.na-btn-copy .material-symbols-outlined {
+  font-size: 1.05rem;
+}
+
+/* Acciones secundarias (Editar y Eliminar) */
+.na-card-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.na-action-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.na-action-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.na-action-icon-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.16);
+  color: #ef4444;
+}
+
+.na-action-icon-btn .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
+/* ==============================================================================
+   4. ESTADOS DE CARGA Y VACÍO
+============================================================================== */
+.na-loading-state,
+.na-empty-state {
+  padding: 4rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: rgba(4, 9, 20, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.na-empty-state .material-symbols-outlined {
+  font-size: 2.75rem;
+  color: #475569;
+  margin-bottom: 0.25rem;
+}
+
+.na-empty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.na-empty-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #8b9cb3;
+  max-width: 420px;
+}
+
+.na-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: naSpin 0.75s linear infinite;
+}
+
+@keyframes naSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==============================================================================
+   5. MODAL DE CREACIÓN / EDICIÓN (FIDELIDAD 1:1)
+============================================================================== */
+.na-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(2, 6, 23, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: naFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.na-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  background: #080f1e;
+  background: radial-gradient(circle at 50% 0%, #0d1b36 0%, #060b16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  padding: 24px 26px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+  animation: naScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes naScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.na-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.na-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.na-modal-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.na-modal-icon-badge .material-symbols-outlined {
+  font-size: 1.65rem;
+}
+
+.na-modal-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.na-modal-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.na-modal-subtitle {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #8b9cb3;
+  line-height: 1.35;
+}
+
+.na-modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.na-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
+.na-modal-close-btn .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+.na-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.na-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.na-modal-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.na-required {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.na-modal-textarea {
+  width: 100%;
+  min-height: 120px;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 0.92rem;
+  color: #f8fafc;
+  outline: none;
+  resize: vertical;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.na-modal-textarea::placeholder {
+  color: #475569;
+}
+
+.na-modal-textarea:focus {
+  border-color: #3b82f6;
+  background: #060d1b;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+}
+
+.na-fav-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  color: #cbd5e1;
+  user-select: none;
+}
+
+.na-toggle-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: all 0.18s ease;
+}
+
+.na-toggle-box .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
+.na-toggle-box.is-checked {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+.na-modal-footer {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.na-btn-modal-cancel {
+  height: 44px;
+  padding: 0 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #cbd5e1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.na-btn-modal-cancel:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.na-btn-modal-save {
+  height: 44px;
+  padding: 0 24px;
+  background: #2563eb;
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+  transition: all 0.18s ease;
+}
+
+.na-btn-modal-save:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  transform: translateY(-1px);
+}
+
+.na-btn-modal-save .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+/* ==============================================================================
+   REFINAMIENTO VISUAL (según nueva imagen de referencia)
+============================================================================== */
+.na-view {
+  background:
+    radial-gradient(ellipse 50% 35% at 0% 8%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 100% 100%, rgba(8, 145, 178, 0.2) 0%, transparent 70%);
+}
+
+/* Badge del encabezado en degradado azul */
+.na-icon-badge {
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 8px 22px -6px rgba(37, 99, 235, 0.6);
+}
+
+.na-title {
+  font-weight: 800;
+}
+
+/* Botón Agregar nota con degradado */
+.na-btn-add {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, 0.6);
+}
+
+.na-btn-add:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  filter: brightness(1.12);
+}
+
+/* Tabs con contador azul */
+.na-tab-count {
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.na-tab-btn.is-active {
+  background: linear-gradient(180deg, #172849 0%, #101c36 100%);
+  border-color: rgba(96, 130, 200, 0.35);
+}
+
+/* Tarjetas */
+.na-grid-cards {
+  gap: 1.1rem;
+}
+
+.na-card {
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.95) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.15rem 1.2rem 1rem;
+  min-height: 135px;
+  box-shadow: none;
+}
+
+.na-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -12px rgba(37, 99, 235, 0.35);
+}
+
+/* Favoritas: solo borde amarillo/dorado, fondo oscuro normal */
+.na-card.is-fav {
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.95) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.na-card.is-fav:hover {
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 0 14px 30px -12px rgba(251, 191, 36, 0.25);
+}
+
+.na-card-text {
+  font-size: 0.88rem;
+  color: #e8edf7;
+}
+
+/* Botón COPIAR: pill azul con degradado y brillo */
+.na-btn-copy {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.28) 0%, rgba(30, 64, 175, 0.2) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  color: #bfdbfe;
+  border-radius: 9px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px -6px rgba(37, 99, 235, 0.6);
+}
+
+.na-btn-copy .material-symbols-outlined {
+  color: #60a5fa;
+  font-size: 1rem;
+}
+
+.na-btn-copy:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  border-color: transparent;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px -6px rgba(37, 99, 235, 0.7);
+}
+
+.na-btn-copy:hover .material-symbols-outlined {
+  color: #ffffff;
+}
+
+.na-btn-copy:active {
+  transform: translateY(0);
+}
+
+.na-btn-copy.is-copied {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.2) 100%) !important;
+  border-color: rgba(52, 211, 153, 0.6) !important;
+  color: #a7f3d0 !important;
+}
+
+.na-btn-copy.is-copied .material-symbols-outlined {
+  color: #34d399;
+}
+
+/* Acciones editar / eliminar */
+.na-action-icon-btn {
+  color: #7c8aa5;
+}
+
+.na-action-icon-btn:hover {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93c5fd;
+}
+
+.na-action-icon-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
+}
+
+/* ==============================================================================
+   REFINAMIENTO VISUAL (según nueva imagen de referencia)
+============================================================================== */
+.na-view {
+  background:
+    radial-gradient(ellipse 50% 35% at 0% 8%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 100% 100%, rgba(8, 145, 178, 0.2) 0%, transparent 70%);
+}
+
+/* Badge del encabezado en degradado azul */
+.na-icon-badge {
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 8px 22px -6px rgba(37, 99, 235, 0.6);
+}
+
+.na-title {
+  font-weight: 800;
+}
+
+/* Botón Agregar nota con degradado */
+.na-btn-add {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, 0.6);
+}
+
+.na-btn-add:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  filter: brightness(1.12);
+}
+
+/* Tabs con contador azul */
+.na-tab-count {
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.na-tab-btn.is-active {
+  background: linear-gradient(180deg, #172849 0%, #101c36 100%);
+  border-color: rgba(96, 130, 200, 0.35);
+}
+
+/* Tarjetas */
+.na-grid-cards {
+  gap: 1.1rem;
+}
+
+.na-card {
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.95) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.15rem 1.2rem 1rem;
+  min-height: 135px;
+  box-shadow: none;
+}
+
+.na-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -12px rgba(37, 99, 235, 0.35);
+}
+
+/* Favoritas: solo borde amarillo/dorado, fondo oscuro normal */
+.na-card.is-fav {
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.95) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.na-card.is-fav:hover {
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 0 14px 30px -12px rgba(251, 191, 36, 0.25);
+}
+
+.na-card-text {
+  font-size: 0.90rem;
+  color: #e8edf7;
+}
+
+/* Botón COPIAR: pill azul con degradado y brillo */
+.na-btn-copy {
+  background: linear-gradient(180deg, rgb(0 0 0) 0%, rgb(33 75 212 / 16%) 100%);
+  border: 1px solid #0a1830;
+  color: #bfdbfe;
+  border-radius: 9px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px -6px rgba(37, 99, 235, 0.6);
+}
+
+.na-btn-copy .material-symbols-outlined {
+  color: #60a5fa;
+  font-size: 1rem;
+}
+
+.na-btn-copy:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  border-color: transparent;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px -6px rgba(37, 99, 235, 0.7);
+}
+
+.na-btn-copy:hover .material-symbols-outlined {
+  color: #ffffff;
+}
+
+.na-btn-copy:active {
+  transform: translateY(0);
+}
+
+.na-btn-copy.is-copied {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.2) 100%) !important;
+  border-color: rgba(52, 211, 153, 0.6) !important;
+  color: #a7f3d0 !important;
+}
+
+.na-btn-copy.is-copied .material-symbols-outlined {
+  color: #34d399;
+}
+
+/* Acciones editar / eliminar */
+.na-action-icon-btn {
+  color: #7c8aa5;
+}
+
+.na-action-icon-btn:hover {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93c5fd;
+}
+
+.na-action-icon-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
+}
+
+/* ==============================================================================
+   MODAL NOTA — REFINAMIENTO
+============================================================================== */
+.na-modal-backdrop {
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.na-modal-card {
+  max-width: 560px;
+  padding: 28px 30px 26px;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse 80% 45% at 15% 0%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    linear-gradient(180deg, #0b1326 0%, #060b17 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.9), 0 0 60px -20px rgba(37, 99, 235, 0.35);
+}
+
+.na-modal-header {
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.na-modal-icon-badge {
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 10px 24px -6px rgba(37, 99, 235, 0.65);
+}
+
+.na-modal-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.na-modal-textarea {
+  min-height: 150px;
+  border-radius: 14px;
+  background: #050a16;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.na-modal-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: #6b7a96;
+  padding: 0 2px;
+}
+
+.na-modal-meta kbd {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #a5b4cf;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  padding: 1px 6px;
+}
+
+/* Tarjeta de favorita con interruptor */
+.na-fav-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.na-fav-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.na-fav-card.is-on {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.14) 0%, rgba(251, 191, 36, 0.03) 100%);
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.na-fav-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: #7c8aa5;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.na-fav-card-icon .material-symbols-outlined {
+  font-size: 1.3rem;
+}
+
+.na-fav-card.is-on .na-fav-card-icon {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.na-fav-card.is-on .na-fav-card-icon .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+
+.na-fav-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.na-fav-card-text strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.na-fav-card-text small {
+  font-size: 0.76rem;
+  color: #7c8aa5;
+}
+
+.na-switch {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: #1b2540;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.na-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.na-fav-card.is-on .na-switch {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.na-fav-card.is-on .na-switch-knob {
+  left: 20px;
+  background: #fff;
+}
+
+/* Botones del footer */
+.na-modal-footer {
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.na-btn-modal-save {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  box-shadow: 0 10px 26px -8px rgba(37, 99, 235, 0.65);
+}
+
+.na-btn-modal-save:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #0e7490 100%);
+  filter: brightness(1.12);
+}

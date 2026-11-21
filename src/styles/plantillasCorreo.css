@@ -1,0 +1,966 @@
+/* ==============================================================================
+   PLANTILLAS DE CORREO (PARA Y CC) — DARK OBSIDIAN DESIGN 1:1 FIDELITY
+============================================================================== */
+
+.pc-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: transparent;
+  color: #fff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-y: auto;
+  padding: 2rem 1.5rem 4rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.pc-container {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 5;
+  animation: pcFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pcFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================================================================
+   1. HEADER PRINCIPAL DE LA PÁGINA
+============================================================================== */
+.pc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pc-title-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pc-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.pc-icon .material-symbols-outlined {
+  font-size: 1.55rem;
+}
+
+.pc-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.pc-subtitle {
+  font-size: 0.85rem;
+  color: #8b9cb3;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+}
+
+/* Botón superior derecho: Copiar PARA + CC */
+.pc-btn-copiar-ambos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.58rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.pc-btn-copiar-ambos:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  transform: translateY(-1px);
+}
+
+.pc-btn-copiar-ambos:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pc-btn-copiar-ambos.is-ok {
+  background: #10b981 !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35) !important;
+}
+
+/* ==============================================================================
+   2. GRID EN 2 COLUMNAS (PARA Y CC)
+============================================================================== */
+.pc-destinatarios-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 980px) {
+  .pc-destinatarios-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==============================================================================
+   3. TARJETAS DE SECCIÓN (CARDS PRINCIPALES DE CADA COLUMNA)
+============================================================================== */
+.pc-card {
+  background: #080f1e;
+  background: radial-gradient(circle at 50% 0%, #0d1a33 0%, #060b17 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.75);
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pc-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Encabezado del Card */
+.pc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pc-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.pc-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pc-accent, #60a5fa);
+  flex-shrink: 0;
+}
+
+/* Para la columna CC se aplica tono púrpura */
+.pc-card[style*="#a855f7"] .pc-card-icon,
+.pc-card[style*="#a78bfa"] .pc-card-icon {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.pc-card-icon .material-symbols-outlined {
+  font-size: 1.35rem;
+}
+
+.pc-card-title-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pc-card-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.pc-card-meta {
+  font-size: 0.78rem;
+  color: #8b9cb3;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.pc-card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* Botón "Copiar todas" */
+.pc-btn-copy-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.pc-btn-copy-all:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.pc-btn-copy-all.is-ok {
+  background: rgba(16, 185, 129, 0.18) !important;
+  color: #34d399 !important;
+  border-color: #10b981 !important;
+}
+
+.pc-btn-copy-all .material-symbols-outlined {
+  font-size: 1.05rem;
+}
+
+/* Botón "+ Nueva tanda" */
+.pc-btn-new-tanda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--pc-accent, #3b82f6);
+  color: #ffffff;
+  border: none;
+  padding: 0.48rem 0.95rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+/* En CC se asegura el púrpura exacto */
+.pc-card[style*="#a855f7"] .pc-btn-new-tanda,
+.pc-card[style*="#a78bfa"] .pc-btn-new-tanda {
+  background: #a855f7;
+}
+
+.pc-btn-new-tanda:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+.pc-btn-new-tanda .material-symbols-outlined {
+  font-size: 1.15rem;
+}
+
+/* ==============================================================================
+   4. BUSCADOR INTEGRADO
+============================================================================== */
+.pc-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.pc-search-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.pc-search-input {
+  width: 100%;
+  height: 44px;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0 40px 0 42px;
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pc-search-input::placeholder {
+  color: #64748b;
+}
+
+.pc-search-input:focus {
+  border-color: var(--pc-accent, #3b82f6);
+  background: #060d1b;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.pc-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-search-clear:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pc-search-clear .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+/* ==============================================================================
+   5. LISTA Y TARJETA INDIVIDUAL DE TANDA
+============================================================================== */
+.pc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  max-height: 901px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.pc-tanda {
+  background: rgba(6, 12, 24, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 1.05rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.pc-tanda:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Header de la Tanda */
+.pc-tanda-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.pc-tanda-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.pc-tanda-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pc-tag, var(--pc-accent, #3b82f6));
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.pc-tanda-nombre {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-tanda-count {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(37, 99, 235, 0.18);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  color: #93c5fd;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.pc-card[style*="#a855f7"] .pc-tanda-count,
+.pc-card[style*="#a78bfa"] .pc-tanda-count {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.28);
+  color: #d8b4fe;
+}
+
+.pc-tag.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+/* Acciones por Tanda (Copiar / Editar / Eliminar) */
+.pc-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.pc-icon-btn {
+  height: 32px;
+  padding: 0 0.65rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.pc-icon-btn .material-symbols-outlined {
+  font-size: 1.05rem;
+}
+
+.pc-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.pc-icon-btn.copy:hover {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.pc-icon-btn.copy.is-ok {
+  color: #34d399 !important;
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.18) !important;
+}
+
+.pc-icon-btn.edit:hover {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.pc-icon-btn.delete:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.pc-icon-btn.delete.is-confirm {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
+}
+
+/* ==============================================================================
+   6. BANNER DE ALERTA DE DUPLICADOS (DENTRO DE LA TANDA)
+============================================================================== */
+.pc-dup-alert-banner {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pc-dup-alert-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pc-dup-alert-icon {
+  color: #f59e0b;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.pc-dup-alert-text {
+  color: #fef3c7;
+  font-size: 0.84rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-dup-alert-btn {
+  background: #f59e0b;
+  color: #0f172a;
+  border: none;
+  border-radius: 8px;
+  padding: 0.35rem 0.95rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pc-dup-alert-btn:hover {
+  background: #fbbf24;
+  transform: translateY(-1px);
+}
+
+/* ==============================================================================
+   7. GRID DE DESTINATARIOS EN 2 COLUMNAS (CARDS CON AVATAR)
+============================================================================== */
+.pc-recipient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+@media (max-width: 640px) {
+  .pc-recipient-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pc-recipient-card {
+  background: rgba(3, 8, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.pc-recipient-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.pc-recipient-card.is-dup {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.pc-recipient-card.is-inv {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.pc-recipient-card.is-ok {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.pc-recipient-card-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.pc-recipient-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.22);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+/* En la columna CC el avatar es púrpura */
+.pc-card[style*="#a855f7"] .pc-recipient-avatar,
+.pc-card[style*="#a78bfa"] .pc-recipient-avatar {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.pc-recipient-card.is-ok .pc-recipient-avatar {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+.pc-avatar-check {
+  font-size: 1rem;
+}
+
+.pc-recipient-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.pc-recipient-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-recipient-email {
+  font-size: 0.74rem;
+  color: #8b9cb3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.pc-recipient-remove-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.pc-recipient-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ef4444;
+}
+
+.pc-recipient-remove-btn .material-symbols-outlined {
+  font-size: 14px;
+}
+
+/* Botón "Ver X más" */
+.pc-btn-more-cards {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+  margin-top: 0.2rem;
+}
+
+.pc-btn-more-cards:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.pc-btn-more-cards.is-collapse {
+  border-style: solid;
+}
+
+/* ==============================================================================
+   8. FORMULARIO DESPLEGABLE (CREAR / EDITAR TANDA)
+============================================================================== */
+.pc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: #040914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.1rem;
+  animation: pcFormSlide 0.22s ease-out;
+}
+
+@keyframes pcFormSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pc-form-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pc-input {
+  flex: 1;
+  min-width: 200px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0 0.85rem;
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pc-input:focus {
+  border-color: var(--pc-accent, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.pc-colors {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.55rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+.pc-color-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  padding: 0;
+}
+
+.pc-color-dot:hover {
+  transform: scale(1.2);
+}
+
+.pc-color-dot.is-active {
+  border-color: #ffffff;
+  transform: scale(1.25);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.pc-textarea {
+  width: 100%;
+  min-height: 110px;
+  max-height: 200px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.82rem;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  line-height: 1.45;
+  outline: none;
+  resize: vertical;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pc-textarea:focus {
+  border-color: var(--pc-accent, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.pc-form-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pc-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.74rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.pc-stat .material-symbols-outlined {
+  font-size: 0.95rem;
+}
+
+.pc-stat.ok { color: #34d399; }
+.pc-stat.warn { color: #fbbf24; }
+.pc-stat.danger { color: #f87171; }
+
+.pc-link-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pc-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pc-btn-save {
+  height: 38px;
+  padding: 0 1rem;
+  background: var(--pc-accent, #3b82f6);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pc-btn-cancel {
+  height: 38px;
+  padding: 0 0.85rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.pc-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.85rem;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pc-empty .material-symbols-outlined {
+  font-size: 2.25rem;
+  color: #475569;
+}
+
+.pc-empty strong {
+  color: #cbd5e1;
+  font-size: 0.92rem;
+}
+
+.pc-empty p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.pc-tanda-vacia {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Compatibilidad de tamaño global */
+.ap-table-responsive {
+  width: 100%;
+  max-height: 901px;
+}

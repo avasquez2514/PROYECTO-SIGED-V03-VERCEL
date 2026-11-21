@@ -1,0 +1,188 @@
+/* ==============================================================================
+   SELECTOR DE TORRE — DARK OBSIDIAN DESIGN (FIDELIDAD 1:1, TODO MAYÚSCULAS)
+============================================================================== */
+
+.torre-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(ellipse 55% 45% at 8% 12%, rgba(37, 99, 235, 0.26) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 95% 95%, rgba(8, 145, 178, 0.24) 0%, transparent 70%),
+    #030712;
+  animation: torreFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes torreFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Badge superior de antena */
+.torre-header-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 14px 36px -8px rgba(37, 99, 235, 0.7), 0 0 0 6px rgba(37, 99, 235, 0.08);
+}
+
+.torre-header-badge .material-symbols-outlined {
+  font-size: 1.75rem;
+}
+
+/* Título y Subtítulo en mayúsculas */
+.torre-selector-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.65rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+}
+
+.torre-selector-subtitle {
+  margin: 0.65rem 0 2.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7c8aa5;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Contenedor de botones: 4 arriba, 3 centrados abajo */
+.torre-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  max-width: 1020px;
+  width: 100%;
+}
+
+/* Tarjeta de cada torre */
+.torre-button {
+  width: 238px;
+  min-height: 76px;
+  padding: 0.95rem 1.1rem;
+  background: linear-gradient(180deg, rgba(11, 18, 36, 0.92) 0%, rgba(7, 12, 26, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 14px 32px -18px rgba(0, 0, 0, 0.75);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: torreFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.torre-button:hover {
+  background: linear-gradient(180deg, rgba(18, 30, 58, 0.95) 0%, rgba(10, 17, 36, 0.98) 100%);
+  border-color: rgba(59, 130, 246, 0.48);
+  box-shadow: 0 16px 36px -12px rgba(37, 99, 235, 0.45);
+  transform: translateY(-2px);
+}
+
+.torre-button:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.torre-button:focus-visible {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.torre-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.torre-btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: rgba(37, 99, 235, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.torre-btn-icon .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+.torre-button:hover .torre-btn-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #0e7490 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 16px -4px rgba(37, 99, 235, 0.65);
+}
+
+.torre-btn-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.torre-btn-arrow {
+  font-size: 1.2rem;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.torre-button:hover .torre-btn-arrow {
+  color: #60a5fa;
+  transform: translateX(3px);
+}
+
+/* Delays suaves */
+.torre-button:nth-child(1) { animation-delay: 0.04s; }
+.torre-button:nth-child(2) { animation-delay: 0.08s; }
+.torre-button:nth-child(3) { animation-delay: 0.12s; }
+.torre-button:nth-child(4) { animation-delay: 0.16s; }
+.torre-button:nth-child(5) { animation-delay: 0.20s; }
+.torre-button:nth-child(6) { animation-delay: 0.24s; }
+.torre-button:nth-child(7) { animation-delay: 0.28s; }
+
+@media (max-width: 640px) {
+  .torre-button {
+    width: 100%;
+  }
+}
