@@ -2,12 +2,13 @@
 
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { manejarSesionExpirada } from "../lib/sesion";
 import "../styles/notasAvances.css";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 export interface Nota {
   id: string;
-  plantilla_id?: string;
+  plantilla_id: string;
   texto: string;
   favorito?: boolean;
 }
@@ -17,85 +18,8 @@ interface NotasAvancesProps {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-const STORAGE_KEY_NOTAS = "siged_notas_avances_data";
 const STORAGE_KEY_ORDEN = "siged_notas_avances_orden";
 const STORAGE_KEY_FAVORITOS = "siged_notas_avances_favoritos";
-
-// 12 notas predeterminadas idénticas a la imagen de referencia oficial
-const NOTAS_DEFAULT: Nota[] = [
-  {
-    id: "nota-1",
-    plantilla_id: "p-1",
-    texto: "Cordial saludo, se cancela visita por solicitud del cliente.",
-    favorito: true,
-  },
-  {
-    id: "nota-2",
-    plantilla_id: "p-2",
-    texto: "Se continúa a la espera de llegada de equipo, último avance por parte de inventarios:",
-    favorito: false,
-  },
-  {
-    id: "nota-3",
-    plantilla_id: "p-3",
-    texto: "Buen día,\n\nSe confirma personal:",
-    favorito: false,
-  },
-  {
-    id: "nota-4",
-    plantilla_id: "p-4",
-    texto: "Buen día compañeros, por favor validar si es necesaria la visita y validar fluido eléctrico en la sede. Quedamos atentos para coordinar la visita.",
-    favorito: false,
-  },
-  {
-    id: "nota-5",
-    plantilla_id: "p-5",
-    texto: "Caso se encuentra pendiente para escalamiento a infraestructura.",
-    favorito: false,
-  },
-  {
-    id: "nota-6",
-    plantilla_id: "p-6",
-    texto: "Por solicitud de TIGO, se dejará de atender este incidente en la franja pactada con el usuario, para darle prioridad al incidente INCXXXXXXXXX.",
-    favorito: false,
-  },
-  {
-    id: "nota-7",
-    plantilla_id: "p-7",
-    texto: "Nuestro personal en campo informa que el local está cerrado, se llama al cliente y no contesta, se valida desde la MOC y no es posible comunicarse con el cliente, por tal motivo la orden queda pendiente.",
-    favorito: false,
-  },
-  {
-    id: "nota-8",
-    plantilla_id: "p-8",
-    texto: "Reparador OTDR: ELIAN SANDOVAL\nPrueba OTDR: Con novedad\nDescripción de falla: se realiza medición con equipo OTDR, encontrando evento.",
-    favorito: false,
-  },
-  {
-    id: "nota-9",
-    plantilla_id: "p-9",
-    texto: "Nuestro personal informa que está a la espera de permisos de ingreso por parte del cliente.",
-    favorito: false,
-  },
-  {
-    id: "nota-10",
-    plantilla_id: "p-10",
-    texto: "Se realiza prueba de enlace y se valida continuidad del servicio con el cliente en sede.",
-    favorito: false,
-  },
-  {
-    id: "nota-11",
-    plantilla_id: "p-11",
-    texto: "Visita reprogramada por condiciones climáticas adversas en la zona de trabajo.",
-    favorito: false,
-  },
-  {
-    id: "nota-12",
-    plantilla_id: "p-12",
-    texto: "Incidente cerrado exitosamente tras restablecimiento de energía en el nodo principal.",
-    favorito: false,
-  },
-];
 
 const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
   const [notasAvance, setNotasAvance] = useState<Nota[]>([]);
@@ -106,7 +30,8 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
   const [textoNota, setTextoNota] = useState("");
   const [esFavoritoForm, setEsFavoritoForm] = useState(false);
   const [notaActual, setNotaActual] = useState<Nota | null>(null);
-  const [cargando, setCargando] = useState(false);
+  const [cargando, setCargando] = useState(true);
+  const [guardando, setGuardando] = useState(false);
   const [copiadoId, setCopiadoId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
   const [tabActiva, setTabActiva] = useState<"todas" | "favoritas">("todas");
@@ -117,82 +42,50 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
 
   const prefijo = torre ? `Gestión-MOC-Torre ${torre}:\n\n` : "";
 
-  // Guardar en localStorage
-  const persistirNotas = (notas: Nota[]) => {
-    setNotasAvance(notas);
-    try {
-      localStorage.setItem(STORAGE_KEY_NOTAS, JSON.stringify(notas));
-    } catch (e) {
-      console.error("Error al persistir notas:", e);
-    }
-  };
-
   const cargarNotas = useCallback(async () => {
     setCargando(true);
     const usuario = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("usuario") || "null") : null;
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const usuario_id = usuario?.id;
 
-    // 1. Intentar cargar de API si hay sesión activa
-    if (usuario_id && token) {
-      try {
-        const res = await fetch(`${API_URL}/api/notas/avances/${usuario_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const filtradas: Nota[] = data
+    if (!usuario_id || !token) {
+      setNotasAvance([]);
+      setCargando(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/notas/avances/${usuario_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: "no-store",
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        manejarSesionExpirada();
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      const filtradas: Nota[] = Array.isArray(data)
+        ? data
             .filter((n: any) => n.nota_avances?.trim())
             .map((n: any) => ({
               id: String(n.id),
               plantilla_id: String(n.plantilla_id || n.id),
               texto: n.nota_avances,
-            }));
-          if (filtradas.length > 0) {
-            setNotasAvance(filtradas);
-            persistirNotas(filtradas);
-            setCargando(false);
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn("No se pudo cargar desde la API, usando datos locales:", err);
-      }
+            }))
+        : [];
+
+      setNotasAvance(filtradas);
+    } catch (err) {
+      console.error("Error cargando notas de avance desde la base de datos:", err);
+    } finally {
+      setCargando(false);
     }
-
-    // 2. Intentar cargar desde localStorage
-    try {
-      const guardado = localStorage.getItem(STORAGE_KEY_NOTAS);
-      if (guardado) {
-        const parsed = JSON.parse(guardado);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setNotasAvance(parsed);
-          setCargando(false);
-          return;
-        }
-      }
-    } catch (e) {
-      console.error("Error leyendo notas de localStorage:", e);
-    }
-
-    // 3. Fallback a las 12 notas predeterminadas de la maqueta
-    setNotasAvance(NOTAS_DEFAULT);
-    persistirNotas(NOTAS_DEFAULT);
-
-    // Inicializar favoritos por defecto (nota-1)
-    try {
-      const favsGuardados = localStorage.getItem(STORAGE_KEY_FAVORITOS);
-      if (!favsGuardados) {
-        setFavoritos(["nota-1"]);
-        localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(["nota-1"]));
-      } else {
-        setFavoritos(JSON.parse(favsGuardados));
-      }
-    } catch {
-      setFavoritos(["nota-1"]);
-    }
-
-    setCargando(false);
   }, []);
 
   useEffect(() => {
@@ -248,7 +141,7 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
       .catch((err) => console.error("Error al copiar: ", err));
   };
 
-  // Alternar favorito
+  // Alternar favorito (preferencia visual)
   const toggleFavorito = (id: string) => {
     const nuevosFavoritos = favoritos.includes(id)
       ? favoritos.filter((fid) => fid !== id)
@@ -260,34 +153,41 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
     } catch (e) {
       console.error("Error guardando favoritos:", e);
     }
-
-    // Actualizar también el objeto nota
-    const actualizadas = notasAvance.map((n) =>
-      n.id === id ? { ...n, favorito: nuevosFavoritos.includes(id) } : n
-    );
-    persistirNotas(actualizadas);
   };
 
-  // Eliminar nota
+  // Eliminar nota en PostgreSQL
   const eliminarNota = async (id: string) => {
     if (!window.confirm("¿Estás seguro de eliminar esta nota de avance?")) return;
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (token) {
-      try {
-        await fetch(`${API_URL}/api/notas/${id}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } catch (error) {
-        console.warn("No se pudo eliminar en el servidor:", error);
-      }
+    if (!token) {
+      manejarSesionExpirada();
+      return;
     }
 
-    const actualizadas = notasAvance.filter((n) => n.id !== id);
-    persistirNotas(actualizadas);
-    setOrdenNotas((prev) => prev.filter((oid) => oid !== id));
-    setFavoritos((prev) => prev.filter((fid) => fid !== id));
+    try {
+      const res = await fetch(`${API_URL}/api/notas/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        manejarSesionExpirada();
+        return;
+      }
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.mensaje || `Error ${res.status}`);
+      }
+
+      setOrdenNotas((prev) => prev.filter((oid) => oid !== id));
+      setFavoritos((prev) => prev.filter((fid) => fid !== id));
+      await cargarNotas();
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Error desconocido";
+      alert(`No se pudo eliminar la nota: ${msg}`);
+    }
   };
 
   // Modal Abrir Agregar
@@ -306,7 +206,7 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
     setModalOpen(true);
   };
 
-  // Guardar Nota (Crear o Editar)
+  // Guardar Nota (Crear o Editar) directamente en PostgreSQL
   const guardarNota = async () => {
     const textoLimpio = textoNota.trim();
     if (!textoLimpio) {
@@ -318,81 +218,87 @@ const NotasAvances: React.FC<NotasAvancesProps> = ({ torre }) => {
     const usuario = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("usuario") || "null") : null;
     const usuario_id = usuario?.id;
 
-    if (notaActual) {
-      // Modo Edición
-      const actualizadas = notasAvance.map((n) =>
-        n.id === notaActual.id ? { ...n, texto: textoLimpio, favorito: esFavoritoForm } : n
-      );
-      persistirNotas(actualizadas);
-
-      if (esFavoritoForm && !favoritos.includes(notaActual.id)) {
-        const nuevosFavs = [...favoritos, notaActual.id];
-        setFavoritos(nuevosFavs);
-        localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
-      } else if (!esFavoritoForm && favoritos.includes(notaActual.id)) {
-        const nuevosFavs = favoritos.filter((id) => id !== notaActual.id);
-        setFavoritos(nuevosFavs);
-        localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
-      }
-
-      if (token && notaActual.plantilla_id) {
-        try {
-          await fetch(`${API_URL}/api/notas/plantilla/${notaActual.plantilla_id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              novedad: `Nota de Avance - ${new Date().toLocaleDateString()}`,
-              nota_avances: textoLimpio,
-            }),
-          });
-        } catch (e) {
-          console.warn("No se pudo sincronizar edición con servidor:", e);
-        }
-      }
-    } else {
-      // Modo Nueva Nota
-      const nuevoId = `nota-${Date.now()}`;
-      const nueva: Nota = {
-        id: nuevoId,
-        plantilla_id: nuevoId,
-        texto: textoLimpio,
-        favorito: esFavoritoForm,
-      };
-
-      const nuevasNotas = [nueva, ...notasAvance];
-      persistirNotas(nuevasNotas);
-      setOrdenNotas([nuevoId, ...ordenNotas]);
-
-      if (esFavoritoForm) {
-        const nuevosFavs = [nuevoId, ...favoritos];
-        setFavoritos(nuevosFavs);
-        localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
-      }
-
-      if (token && usuario_id) {
-        try {
-          await fetch(`${API_URL}/api/notas`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              novedad: `Nota de Avance - ${new Date().toLocaleDateString()}`,
-              nota_avances: textoLimpio,
-              usuario_id,
-            }),
-          });
-        } catch (e) {
-          console.warn("No se pudo sincronizar creación con servidor:", e);
-        }
-      }
+    if (!token || !usuario_id) {
+      manejarSesionExpirada();
+      return;
     }
 
-    setModalOpen(false);
+    setGuardando(true);
+    try {
+      if (notaActual) {
+        const res = await fetch(`${API_URL}/api/notas/plantilla/${notaActual.plantilla_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            nota_avances: textoLimpio,
+          }),
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          manejarSesionExpirada();
+          return;
+        }
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.mensaje || `Error ${res.status}`);
+        }
+
+        if (esFavoritoForm && !favoritos.includes(notaActual.id)) {
+          const nuevosFavs = [...favoritos, notaActual.id];
+          setFavoritos(nuevosFavs);
+          localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
+        } else if (!esFavoritoForm && favoritos.includes(notaActual.id)) {
+          const nuevosFavs = favoritos.filter((id) => id !== notaActual.id);
+          setFavoritos(nuevosFavs);
+          localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
+        }
+      } else {
+        const res = await fetch(`${API_URL}/api/notas`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            novedad: `Nota de Avance - ${Date.now()}`,
+            nota_avances: textoLimpio,
+          }),
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          manejarSesionExpirada();
+          return;
+        }
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.mensaje || `Error ${res.status}`);
+        }
+
+        const created = await res.json().catch(() => null);
+        if (created?.id) {
+          const idReal = String(created.id);
+          setOrdenNotas((prev) => [idReal, ...prev]);
+          if (esFavoritoForm) {
+            const nuevosFavs = [idReal, ...favoritos];
+            setFavoritos(nuevosFavs);
+            localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(nuevosFavs));
+          }
+        }
+      }
+
+      setModalOpen(false);
+      await cargarNotas();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Error desconocido";
+      alert(`No se pudo guardar la nota en la base de datos: ${msg}`);
+    } finally {
+      setGuardando(false);
+    }
   };
 
   // Drag and drop reordering

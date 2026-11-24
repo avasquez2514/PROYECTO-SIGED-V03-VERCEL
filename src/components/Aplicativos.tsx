@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { manejarSesionExpirada } from "../lib/sesion";
 import "../styles/aplicativos.css";
 
 export interface Aplicativo {
-  id: string | number;
+  id: string;
   nombre: string;
   subtitulo?: string;
   url: string;
@@ -18,165 +19,15 @@ interface AplicativosProps {
   torre?: string;
 }
 
-const STORAGE_KEY_APLICATIVOS = "siged_aplicativos_data";
-const STORAGE_KEY_CATEGORIAS = "siged_aplicativos_categorias";
-
-// Lista inicial de 16 aplicaciones oficiales exacta a la imagen de referencia
-const APLICATIVOS_INICIALES: Aplicativo[] = [
-  {
-    id: "app-1",
-    nombre: "FORMULARIO-TECNICOS-FSCR",
-    subtitulo: "Google Forms",
-    url: "https://docs.google.com/forms/d/e/1FAIpQLScFormularioTecnicos/viewform",
-    categoria: "Formularios",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-2",
-    nombre: "PARAFISCALES-FSCR",
-    subtitulo: "SharePoint · Drive",
-    url: "https://millicom-my.sharepoint.com/personal/parafiscales_tigo",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "folder",
-  },
-  {
-    id: "app-3",
-    nombre: "GESTION MOC-FCSR",
-    subtitulo: "Google Sheets",
-    url: "https://docs.google.com/spreadsheets/d/1GestionMOC_TigoB2B",
-    categoria: "Hojas de cálculo",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-4",
-    nombre: "SEGUIMIENTO TECNICOS",
-    subtitulo: "Web app",
-    url: "https://corporativo.tigoune.com.co/seguimiento",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-5",
-    nombre: "SIGED",
-    subtitulo: "Web app",
-    url: "https://proyecto-siged.onrender.com",
-    categoria: "Web apps",
-    estado: "Mantenimiento",
-    icono: "grid_view",
-  },
-  {
-    id: "app-6",
-    nombre: "CONFIRMACION VISITAS",
-    subtitulo: "Google Sheets",
-    url: "https://docs.google.com/spreadsheets/d/ConfirmacionVisitas_B2B",
-    categoria: "Hojas de cálculo",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-7",
-    nombre: "SMNET",
-    subtitulo: "Web app",
-    url: "https://smnet.une.net.co",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-8",
-    nombre: "BUZON DESPACHO",
-    subtitulo: "Outlook Mail",
-    url: "https://outlook.office.com/mail/inbox",
-    categoria: "Correo",
-    estado: "Activo",
-    icono: "mail",
-  },
-  {
-    id: "app-9",
-    nombre: "BMC REMEDY HELPDESK",
-    subtitulo: "ITSM Platform",
-    url: "https://remedy.tigoune.com.co/arsys",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "bolt",
-  },
-  {
-    id: "app-10",
-    nombre: "PYMES B2B GESTION",
-    subtitulo: "Internal Tool",
-    url: "https://pymes.tigo.com.co/portal",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "apps",
-  },
-  {
-    id: "app-11",
-    nombre: "MONITOREO DE ENLACES",
-    subtitulo: "Nagios / Zabbix",
-    url: "https://monitoreo.tigoune.com.co/zabbix",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "monitoring",
-  },
-  {
-    id: "app-12",
-    nombre: "PLANILLAS OPERATIVAS",
-    subtitulo: "Google Sheets",
-    url: "https://docs.google.com/spreadsheets/d/PlanillasOperativasB2B",
-    categoria: "Hojas de cálculo",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-13",
-    nombre: "GMAIL CORPORATIVO",
-    subtitulo: "Google Workspace",
-    url: "https://mail.google.com",
-    categoria: "Correo",
-    estado: "Activo",
-    icono: "mail",
-  },
-  {
-    id: "app-14",
-    nombre: "ENCUESTAS DE SATISFACCION",
-    subtitulo: "Google Forms",
-    url: "https://docs.google.com/forms/d/EncuestasSatisfaccion",
-    categoria: "Formularios",
-    estado: "Activo",
-    icono: "grid_view",
-  },
-  {
-    id: "app-15",
-    nombre: "PORTAL DE INCIDENCIAS B2B",
-    subtitulo: "Portal Web",
-    url: "https://incidencias.tigo.com.co",
-    categoria: "Web apps",
-    estado: "Mantenimiento",
-    icono: "apps",
-  },
-  {
-    id: "app-16",
-    nombre: "WHATSAPP WEB DESPACHO",
-    subtitulo: "Web App",
-    url: "https://web.whatsapp.com",
-    categoria: "Web apps",
-    estado: "Activo",
-    icono: "chat",
-  },
-];
-
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL || ""}/api/aplicativos`;
 const CATEGORIAS_BASE = ["Formularios", "Hojas de cálculo", "Correo", "Web apps"];
-
 const ITEMS_POR_PAGINA = 8;
 
 const Aplicativos: React.FC<AplicativosProps> = () => {
   // --- Estados de Datos ---
   const [aplicativos, setAplicativos] = useState<Aplicativo[]>([]);
-  const [cargado, setCargado] = useState(false);
+  const [cargando, setCargando] = useState(true);
+  const [guardando, setGuardando] = useState(false);
 
   // --- Estados de Filtros y Navegación ---
   const [categoriaActiva, setCategoriaActiva] = useState<string>("Todos");
@@ -186,9 +37,8 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
   // --- Selección múltiple ---
   const [seleccionados, setSeleccionados] = useState<Set<string | number>>(new Set());
 
-  // --- Feedback de Copiado y Popups bloqueados ---
+  // --- Feedback de Copiado ---
   const [copiadoId, setCopiadoId] = useState<string | number | null>(null);
-  const [avisoPopup, setAvisoPopup] = useState<string | null>(null);
 
   // --- Estados de Modal de Creación / Edición ---
   const [modalOpen, setModalOpen] = useState(false);
@@ -214,39 +64,55 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [modalOpen]);
 
-  // --- Carga Inicial ---
-  useEffect(() => {
+  // --- Carga Inicial desde PostgreSQL ---
+  const cargarAplicativos = useCallback(async () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      setCargando(false);
+      return;
+    }
+
+    setCargando(true);
     try {
-      const guardados = localStorage.getItem(STORAGE_KEY_APLICATIVOS);
-      if (guardados) {
-        const parsed: Aplicativo[] = JSON.parse(guardados);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setAplicativos(parsed);
-        } else {
-          setAplicativos(APLICATIVOS_INICIALES);
-          localStorage.setItem(STORAGE_KEY_APLICATIVOS, JSON.stringify(APLICATIVOS_INICIALES));
-        }
+      const res = await fetch(API_URL, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: "no-store",
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        manejarSesionExpirada();
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        const mapeados: Aplicativo[] = data.map((row: any) => ({
+          id: String(row.id),
+          nombre: row.nombre || "Sin nombre",
+          subtitulo: row.categoria || "Web app",
+          url: row.url || "",
+          categoria: row.categoria || "Web apps",
+          estado: "Activo",
+          icono: "grid_view",
+        }));
+        setAplicativos(mapeados);
       } else {
-        setAplicativos(APLICATIVOS_INICIALES);
-        localStorage.setItem(STORAGE_KEY_APLICATIVOS, JSON.stringify(APLICATIVOS_INICIALES));
+        setAplicativos([]);
       }
     } catch (e) {
-      console.error("Error cargando aplicativos:", e);
-      setAplicativos(APLICATIVOS_INICIALES);
+      console.error("Error cargando aplicativos desde la base de datos:", e);
     } finally {
-      setCargado(true);
+      setCargando(false);
     }
   }, []);
 
-  // --- Guardar en localStorage ---
-  const guardarAplicativos = (nuevaLista: Aplicativo[]) => {
-    setAplicativos(nuevaLista);
-    try {
-      localStorage.setItem(STORAGE_KEY_APLICATIVOS, JSON.stringify(nuevaLista));
-    } catch (e) {
-      console.error("Error guardando aplicativos:", e);
-    }
-  };
+  useEffect(() => {
+    cargarAplicativos();
+  }, [cargarAplicativos]);
 
   // --- Helper para extraer dominio limpio ---
   const extraerDominio = (urlStr: string): string => {
@@ -349,18 +215,14 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
   const enMantenimiento = aplicativos.filter((a) => a.estado === "Mantenimiento").length;
 
   // --- Manejadores de Selección ---
-  const todosVisiblesSeleccionados =
-    appsRenderizadas.length > 0 &&
-    appsRenderizadas.every((a) => seleccionados.has(a.id));
-
   const toggleSeleccionarTodos = () => {
-    const nuevoSet = new Set(seleccionados);
-    if (todosVisiblesSeleccionados) {
-      appsRenderizadas.forEach((a) => nuevoSet.delete(a.id));
+    if (seleccionados.size === appsRenderizadas.length && appsRenderizadas.length > 0) {
+      setSeleccionados(new Set());
     } else {
+      const nuevoSet = new Set<string | number>();
       appsRenderizadas.forEach((a) => nuevoSet.add(a.id));
+      setSeleccionados(nuevoSet);
     }
-    setSeleccionados(nuevoSet);
   };
 
   const toggleSeleccionarItem = (id: string | number) => {
@@ -371,37 +233,6 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
       nuevo.add(id);
     }
     setSeleccionados(nuevo);
-  };
-
-  const limpiarSeleccion = () => {
-    setSeleccionados(new Set());
-    setAvisoPopup(null);
-  };
-
-  const ejecutarSeleccionados = () => {
-    const appsParaAbrir = aplicativos.filter((a) => seleccionados.has(a.id));
-    if (appsParaAbrir.length === 0) return;
-
-    let bloqueados = 0;
-    appsParaAbrir.forEach((app) => {
-      const urlLimpia = app.url.trim();
-      const u = urlLimpia.startsWith("http://") || urlLimpia.startsWith("https://")
-        ? urlLimpia
-        : `https://${urlLimpia}`;
-      const win = window.open(u, "_blank", "noopener,noreferrer");
-      if (!win) {
-        bloqueados += 1;
-      }
-    });
-
-    if (bloqueados > 0) {
-      setAvisoPopup(
-        `El navegador bloqueó ${bloqueados} pestaña(s). Permite las ventanas emergentes para este sitio en la barra de direcciones para abrir todos al mismo tiempo.`
-      );
-      setTimeout(() => setAvisoPopup(null), 8000);
-    } else {
-      setAvisoPopup(null);
-    }
   };
 
   // --- Acciones de Fila ---
@@ -439,53 +270,93 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
     setModalOpen(true);
   };
 
-  const handleGuardarModal = () => {
+  const handleGuardarModal = async () => {
     if (!formNombre.trim() || !formUrl.trim()) {
       alert("Por favor completa el nombre y la URL del aplicativo.");
       return;
     }
 
-    const catFinal = nuevaCatInput.trim() || formCategoria || "Web apps";
-
-    if (editandoId !== null) {
-      const actualizados = aplicativos.map((a) =>
-        a.id === editandoId
-          ? {
-              ...a,
-              nombre: formNombre.trim(),
-              subtitulo: formSubtitulo.trim() || "Web app",
-              url: formUrl.trim(),
-              categoria: catFinal,
-              estado: formEstado,
-            }
-          : a
-      );
-      guardarAplicativos(actualizados);
-    } else {
-      const nuevo: Aplicativo = {
-        id: `app-${Date.now()}`,
-        nombre: formNombre.trim(),
-        subtitulo: formSubtitulo.trim() || "Web app",
-        url: formUrl.trim(),
-        categoria: catFinal,
-        estado: formEstado,
-        icono: "grid_view",
-      };
-      guardarAplicativos([nuevo, ...aplicativos]);
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      manejarSesionExpirada();
+      return;
     }
 
-    setModalOpen(false);
+    const catFinal =
+      formCategoria === "__nueva__"
+        ? nuevaCatInput.trim() || "Web apps"
+        : nuevaCatInput.trim() || formCategoria || "Web apps";
+
+    setGuardando(true);
+    try {
+      const isEdit = editandoId !== null;
+      const res = await fetch(isEdit ? `${API_URL}/${editandoId}` : API_URL, {
+        method: isEdit ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nombre: formNombre.trim(),
+          url: formUrl.trim(),
+          categoria: catFinal,
+        }),
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        manejarSesionExpirada();
+        return;
+      }
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.mensaje || `Error ${res.status}`);
+      }
+
+      setModalOpen(false);
+      await cargarAplicativos();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Error desconocido";
+      alert(`No se pudo guardar el aplicativo en la base de datos: ${msg}`);
+    } finally {
+      setGuardando(false);
+    }
   };
 
-  const handleEliminar = (id: string | number, nombre: string) => {
-    if (window.confirm(`¿Estás seguro de eliminar el aplicativo "${nombre}"?`)) {
-      const actualizados = aplicativos.filter((a) => a.id !== id);
-      guardarAplicativos(actualizados);
+  const handleEliminar = async (id: string | number, nombre: string) => {
+    if (!window.confirm(`¿Estás seguro de eliminar el aplicativo "${nombre}"?`)) return;
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      manejarSesionExpirada();
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        manejarSesionExpirada();
+        return;
+      }
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.mensaje || `Error ${res.status}`);
+      }
+
       if (seleccionados.has(id)) {
         const nuevo = new Set(seleccionados);
         nuevo.delete(id);
         setSeleccionados(nuevo);
       }
+      await cargarAplicativos();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Error desconocido";
+      alert(`No se pudo eliminar el aplicativo: ${msg}`);
     }
   };
 
@@ -556,53 +427,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
               </button>
             );
           })}
-
-          <div className="ap-tabs-bulk-actions">
-            {seleccionados.size > 0 && (
-              <button
-                type="button"
-                onClick={limpiarSeleccion}
-                className="ap-btn-clear-sel"
-                title="Quitar selección"
-              >
-                <span className="material-symbols-outlined">close</span>
-                <span>Limpiar</span>
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={ejecutarSeleccionados}
-              disabled={seleccionados.size === 0}
-              className={`ap-btn-run-selected ${seleccionados.size > 0 ? "has-selection" : ""}`}
-              title={
-                seleccionados.size > 0
-                  ? `Abrir ${seleccionados.size} aplicativo(s) en pestañas nuevas`
-                  : "Selecciona uno o más aplicativos en las casillas"
-              }
-            >
-              <span className="material-symbols-outlined">open_in_new</span>
-              <span>
-                Ejecutar seleccionados
-                {seleccionados.size > 0 ? ` (${seleccionados.size})` : ""}
-              </span>
-            </button>
-          </div>
         </nav>
-
-        {avisoPopup && (
-          <div className="ap-popup-warning" role="alert">
-            <span className="material-symbols-outlined">info</span>
-            <span>{avisoPopup}</span>
-            <button
-              type="button"
-              onClick={() => setAvisoPopup(null)}
-              className="ap-popup-warning-close"
-              aria-label="Cerrar aviso"
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-        )}
 
         {/* ============================================================ */}
         {/* TABLA DE APLICATIVOS (DATAGRID)                              */}
@@ -616,7 +441,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                     <label className="ap-checkbox-custom">
                       <input
                         type="checkbox"
-                        checked={todosVisiblesSeleccionados}
+                        checked={appsRenderizadas.length > 0 && seleccionados.size === appsRenderizadas.length}
                         onChange={toggleSeleccionarTodos}
                         aria-label="Seleccionar todos los visibles"
                       />
@@ -631,7 +456,16 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                 </tr>
               </thead>
               <tbody>
-                {appsRenderizadas.length === 0 ? (
+                {cargando ? (
+                  <tr>
+                    <td colSpan={6} className="ap-empty-row">
+                      <div className="ap-empty-box">
+                        <span className="material-symbols-outlined ap-empty-icon">sync</span>
+                        <p className="ap-empty-text">Cargando aplicativos desde la base de datos...</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : appsRenderizadas.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="ap-empty-row">
                       <div className="ap-empty-box">
@@ -682,7 +516,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                           </div>
                         </td>
 
-                        {/* Dominio / URL completa */}
+                        {/* Dominio */}
                         <td className="ap-td-domain">
                           <a
                             href={app.url.startsWith("http") ? app.url : `https://${app.url}`}
@@ -694,7 +528,7 @@ const Aplicativos: React.FC<AplicativosProps> = () => {
                             <span className={`ap-domain-bullet ${getBulletClass(app.estado)}`}>
                               ●
                             </span>
-                            <span className="ap-domain-text">{app.url}</span>
+                            <span className="ap-domain-text">{dominio}</span>
                           </a>
                         </td>
 

@@ -1,39 +1,64 @@
+import { randomUUID } from "crypto";
 import { pool, transaccion } from "@/lib/db";
 import { conAuth, errorMensaje, esUuid, leerJson, responder } from "@/lib/auth";
 
-const tieneRelacion = async (usuarioId: string, plantillaId: string) =>
-  (
-    await pool.query("SELECT 1 FROM notas_despacho_rel WHERE usuario_id = $1 AND plantilla_id = $2", [
-      usuarioId,
-      plantillaId,
-    ])
-  ).rows.length > 0;
-
 /**
  * PUT /api/notas/plantilla/:id — modifica una plantilla del usuario.
- * Solo se actualizan los campos enviados (antes los omitidos se borraban a NULL).
+ * Si la plantilla base la comparten otros usuarios, crea una copia propia para no alterar la de los demás.
  */
 export const PUT = conAuth<{ id: string }>(async (req, sesion, { id }) => {
   if (!esUuid(id)) return errorMensaje("ID de plantilla inválido", 400);
-  if (!(await tieneRelacion(sesion.id, id))) return errorMensaje("Plantilla no encontrada", 404);
 
   const b = await leerJson<Record<string, string | undefined>>(req);
 
-  const result = await pool.query(
-    `UPDATE plantillas_base SET
-       novedad      = COALESCE($1, novedad),
-       nota_publica = COALESCE($2, nota_publica),
-       nota_interna = COALESCE($3, nota_interna),
-       nota_avances = COALESCE($4, nota_avances),
-       plantilla    = COALESCE($5, plantilla)
-     WHERE id = $6`,
-    [b.novedad ?? null, b.nota_publica ?? null, b.nota_interna ?? null, b.nota_avances ?? null, b.plantilla ?? null, id]
-  );
+  const plantillaFinalId = await transaccion(async (client) => {
+    const rel = await client.query(
+      `SELECT ndr.id AS rel_id, pb.novedad, pb.nota_publica, pb.nota_interna, pb.nota_avances, pb.plantilla,
+              (SELECT COUNT(*)::int FROM notas_despacho_rel r WHERE r.plantilla_id = ndr.plantilla_id) AS usuarios
+       FROM notas_despacho_rel ndr
+       INNER JOIN plantillas_base pb ON pb.id = ndr.plantilla_id
+       WHERE ndr.plantilla_id = $1 AND ndr.usuario_id = $2`,
+      [id, sesion.id]
+    );
+    if (rel.rows.length === 0) return null;
+
+    const row = rel.rows[0];
+    if (row.usuarios <= 1) {
+      await client.query(
+        `UPDATE plantillas_base SET
+           novedad      = COALESCE($1, novedad),
+           nota_publica = COALESCE($2, nota_publica),
+           nota_interna = COALESCE($3, nota_interna),
+           nota_avances = COALESCE($4, nota_avances),
+           plantilla    = COALESCE($5, plantilla)
+         WHERE id = $6`,
+        [b.novedad ?? null, b.nota_publica ?? null, b.nota_interna ?? null, b.nota_avances ?? null, b.plantilla ?? null, id]
+      );
+      return id;
+    }
+
+    const nuevoId = randomUUID();
+    await client.query(
+      `INSERT INTO plantillas_base (id, novedad, nota_publica, nota_interna, nota_avances, plantilla)
+       VALUES ($1,$2,$3,$4,$5,$6)`,
+      [
+        nuevoId,
+        b.novedad ?? row.novedad,
+        b.nota_publica ?? row.nota_publica,
+        b.nota_interna ?? row.nota_interna,
+        b.nota_avances ?? row.nota_avances,
+        b.plantilla ?? row.plantilla,
+      ]
+    );
+    await client.query("UPDATE notas_despacho_rel SET plantilla_id = $1 WHERE id = $2", [nuevoId, row.rel_id]);
+    return nuevoId;
+  });
+
+  if (!plantillaFinalId) return errorMensaje("Plantilla no encontrada", 404);
 
   return responder({
     mensaje: "Plantilla actualizada correctamente",
-    filas_afectadas: result.rowCount,
-    plantilla_id: id,
+    plantilla_id: plantillaFinalId,
   });
 });
 
