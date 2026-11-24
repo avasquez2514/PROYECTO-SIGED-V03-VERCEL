@@ -5,10 +5,10 @@
 .alarm-wrapper {
   width: 100%;
   min-height: 100vh;
-  padding: 2.25rem 2rem 4rem;
+  padding: 2rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
   background:
@@ -19,6 +19,7 @@
 .alarm-wrapper-inner {
   width: 100%;
   max-width: 980px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
